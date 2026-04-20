@@ -160,6 +160,10 @@
         document.getElementById('painel-dica').classList.add('escondida');
         const btnDica = document.getElementById('btn-dica');
         if (btnDica) btnDica.style.display = 'none';
+        
+        const balao = document.getElementById('dado-balao');
+        if (balao) balao.classList.remove('mostrar');
+        
         document.getElementById('btn-lancar').disabled = false;
 
         desenharTabuleiro();
@@ -182,6 +186,9 @@
         const msg = document.getElementById('mensagem-resultado');
 
         btn.disabled = true;
+        const balao = document.getElementById('dado-balao');
+        if (balao) balao.classList.remove('mostrar');
+        
         dadoDisplay.classList.add('girando');
         msg.innerText = "Calculando destino...";
         
@@ -213,6 +220,12 @@
             }
 
             valorDadoAtual = valorDado;
+            
+            const balaoDom = document.getElementById('dado-balao');
+            if (balaoDom) {
+                balaoDom.innerText = valorDado;
+                balaoDom.classList.add('mostrar');
+            }
             
             let salto = 0;
             let operacaoTexto = '';
