@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Resto Mania</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</head>
+<body>
+    <div id="aviso-retrato">
+        📱 Gire o celular para o modo paisagem para uma melhor experiência
+    </div>
+    <main id="app">
+        <section id="tela-inicio" class="tela">
+            <h1 class="titulo-jogo">RESTO MANIA</h1>
+            <p class="subtitulo">A aventura onde o que sobra é o que te move!</p>
+            <div class="menu-botoes">
+                <input type="text" id="nome-jogador" placeholder="Seu nome (Opcional)" maxlength="15" style="padding: 10px; font-size: 1rem; border: 1px solid #bdc3c7; border-radius: 5px; text-align: center;">
+                <p style="font-weight: bold; color: #2c3e50; margin-bottom: 0;">Selecione o Nível e Jogue:</p>
+                <button class="btn-jogar" onclick="iniciarJogo(1)">Nível 1: Apenas o Resto</button>
+                <button class="btn-jogar" onclick="iniciarJogo(2)">Nível 2: Resto + Dif. de Dígitos</button>
+                <button class="btn-jogar" onclick="iniciarJogo(3)">Nível 3: Resto + Noves Fora (MOD 9)</button>
+                <button onclick="mostrarRankingTela()" class="btn-secundario" style="background-color: #f39c12;">🏅 RANKING</button>
+                <button onclick="mudarTela('regras')" class="btn-terciario">REGRAS</button>
+                <button onclick="mudarTela('creditos')" class="btn-terciario">CRÉDITOS</button>
+            </div>
+        </section>
+
+        <section id="tela-ranking" class="tela escondida">
+            <h2>Top 10 - Resto Mania</h2>
+            <ol id="lista-ranking" class="lista-ranking"></ol>
+            <button onclick="mudarTela('inicio')" class="btn-terciario">VOLTAR</button>
+        </section>
+
+        <section id="tela-regras" class="tela escondida">
+            <h2>Como Jogar</h2>
+            <p>1. Você começa na casa Inicial.</p>
+            <p>2. Lance o seu dado na arena.</p>
+            <p>3. Resolva o problema matemático de acordo com o Nível escolhido.</p>
+            <p>4. <strong>Mostre que aprendeu: Clique na casa do tabuleiro</strong> onde deves parar!</p>
+            <p><em>* Dica: Parar na Casa 0 concede Magia Pura!</em></p>
+            <button onclick="mudarTela('inicio')" class="btn-terciario">VOLTAR</button>
+        </section>
+
+        <section id="tela-jogo" class="tela escondida">
+
+            <h2>Arena Resto Mania</h2>
+            <p style="text-align: center; color: #7f8c8d; font-weight: bold; margin-top: -15px; margin-bottom: 20px;">O resultado numérico é rigorosamente as casas ativas para pular e avançar!</p>
+            <div id="grade-tabuleiro" class="grid-container"></div>
+            <div id="tabuleiro-info" style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; margin-bottom: 20px; background: #ecf0f1; padding: 10px; border-radius: 10px;">
+                <p id="info-casa-atual" style="margin: 5px;">📍 Casinha Atual: <strong id="valor-casa">43</strong></p>
+                <div class="stats-box" style="display: flex; gap: 15px; font-weight: bold; color: #2c3e50;">
+                    <p style="margin: 5px;">⏱️ <span id="display-tempo">00:00</span></p>
+                    <p style="margin: 5px;">✔️ <span id="display-certos">0</span></p>
+                    <p style="margin: 5px; color: #e74c3c;">❌ <span id="display-errados">0</span></p>
+                </div>
+            </div>
+            <div id="area-dado">
+                <div id="dado-visual">?</div>
+                <button id="btn-lancar" onclick="lancarDado()">Lançar Dado</button>
+            </div>
+            <p id="mensagem-resultado"></p>
+                <div id="painel-calculo">
+                    <p id="texto-divisao"></p>
+                    <button id="btn-dica" onclick="mostrarDicaIA()" class="btn-secundario" style="margin-top: 10px; padding: 5px 10px; font-size: 0.9rem; display: none;">💡 Dica da IA</button>
+                </div>
+                <div id="painel-dica" class="painel-dica escondida">
+                    <p id="texto-dica"></p>
+                    <button onclick="fecharDica()" class="btn-terciario" style="margin-top: 10px; padding: 5px; font-size: 0.8rem;">Entendi, Fechar Dica</button>
+                </div>
+            <button id="btn-sair" onclick="cancelarJogo()">Sair</button>
+        </section>
+
+        <section id="tela-creditos" class="tela escondida">
+            <h2>Créditos</h2>
+            <div style="text-align: left; padding: 0 10px; margin-bottom: 20px;">
+                <p><strong>Autor:</strong> Quintino Gaia</p>
+                <p><strong>Inspiração:</strong> Santos, W. O.; Da Silva, A. P.; Silva Junior, Clovis Gomes da. Conquistando com o Resto: Virtualização de um Jogo para o Ensino de Matemática. Anais do Simpósio Brasileiro de Informática na Educação, 2014.</p>
+                <p><strong>Ferramentas:</strong> Antigravity, Gemini, Mixkit (sounds) e Pngtree (imagens)</p>
+            </div>
+            <button onclick="mudarTela('inicio')" class="btn-terciario">VOLTAR</button>
+        </section>
+
+        <!-- Modal de Vitória -->
+        <div id="modal-vitoria" class="modal escondida">
+            <div class="modal-conteudo">
+                <h2 id="titulo-vitoria">🎉 CONQUISTA DESBLOQUEADA! 🎉</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 10px;">Dominou o <strong>Nível <span id="span-nivel-concluido"></span></strong>!</p>
+                <div style="background: #f1c40f; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="margin: 5px; font-weight: bold;">🎯 Sua Pontuação da Rodada: <span id="span-pontuacao">0</span></p>
+                    <p style="margin: 5px; font-weight: bold;">⭐ Pontuação Acumulada: <span id="span-pontuacao-total">0</span></p>
+                </div>
+                <div class="menu-botoes">
+                    <button class="btn-secundario" onclick="mostrarRankingTela()" style="background-color: #f39c12; margin-top:0;">🏆 Visualizar Ranking</button>
+                    <button class="btn-secundario" onclick="jogarNovamente()" style="margin-top:0;">Jogar Novamente</button>
+                    <button id="btn-proximo-nivel" class="btn-jogar" onclick="jogarProximoNivel()">Avançar para Próximo Nível</button>
+                    <button class="btn-terciario" onclick="voltarMenu()">🏠 Menu Principal</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
